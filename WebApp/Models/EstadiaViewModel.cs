@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,28 +9,33 @@ namespace WebApp.Models
 {
     public class EstadiaViewModel
     {
+        public int ID { get; set; }
+
         [Required(ErrorMessage = "Por favor ingrese el nombre de la estancia")]
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         [Required(ErrorMessage = "Por favor ingrese el nombre de la provincia")]
-        public string Provincia { get; set; }
+        public string? Provincia { get; set; }
 
         [Required(ErrorMessage = "Por favor ingrese la dirección exacta")]
-        public string Direccion { get; set; }
+        public string? Direccion { get; set; }
 
         [Required(ErrorMessage = "Por favor ingrese el precio por noche")]
-        public long PrecionNoche { get; set; }
+        public decimal? PrecionNoche { get; set; }
 
         [Required(ErrorMessage = "Por favor ingrese la capacidad")]
-        public int Capacidad { get; set; }
+        public int? Capacidad { get; set; }
+
+        public string? RutaImagen { get; set; }
 
         [Required(ErrorMessage = "Por favor suba alguna imagen")]
-        public string RutaImagen { get; set; }
+        [DataType(DataType.Upload)]
+        public IFormFile Imagen { get; set; }
 
         [Required(ErrorMessage = "Por favor seleccione algun tipo de categoria")]
-        public string TipoCategoria { get; set; }
+        public string? TipoCategoria { get; set; }
 
         [Required(ErrorMessage = "Por favor ingrese alguna descipción")]
-        public int Descripcion { get; set; }
+        public string? Descripcion { get; set; }
     }
 }

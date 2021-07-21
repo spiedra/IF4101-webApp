@@ -1,0 +1,37 @@
+﻿
+@model WebApp.Models.EstadiaViewModel
+@{
+    ViewData["Title"] = "EstadiaAdministrar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="mt-2">
+    <h1 class="d-inline me-3">Reservas confirmadas</h1>
+    <button id="btn__search--appointment" class="btn mb-2 d-inline btn__search" data-bs-toggle="modal" data-bs-target="#searchModal"><img src="~/assets/search_black_24dp.svg" alt="Icon search" /></button>
+</div>
+<hr />
+<div class="row">
+    <div class="container mt-3 table-responsive">
+        <div class="row w-100">
+            <div class="col-12">
+                <table class="table table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Estadía</th>
+                            <th scope="col">Nombre cliente</th>
+                            <th scope="col">Cantidad de personas</th>
+                            <th scope="col">Fecha de entrada</th>
+                            <th scope="col">Fecha de salida</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyCategoria"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,42 @@
+﻿@model WebApp.Models.CategoriaViewModel
+
+@{
+    ViewData["Title"] = "CategoriaAdministrar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Administración de las categorías</h1>
+<hr />
+<div class="row">
+    <div class="col-6">
+        <form class="me-2 needs-validation" method="POST" asp-controller="Categoria" asp-action="Registrar" novalidate>
+            <div class="form-group mb-3">
+                <label class="control-label mb-1">Tipo de categoría</label>
+                <input asp-for="Tipo" class="form-control" />
+                <span asp-validation-for="Tipo" class="field-validation-error"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Registrar categoría" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="d-flex mt-3 w-100 table-responsive">
+        <div class="row w-75">
+            <div class="col-12 scrollme">
+                <table class="table table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyCategoria"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

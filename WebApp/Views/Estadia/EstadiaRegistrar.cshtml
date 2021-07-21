@@ -5,9 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h1>@ViewBag.image</h1>
+
 <h1>Registro de estancias</h1>
 <hr />
-<form class="container mt-5 mb-3 py-3 form__register needs-validation" method="POST" asp-controller="Appointment" asp-action="Schedule" novalidate>
+<form class="container mt-5 mb-3 py-3 form__register needs-validation" method="POST" enctype="multipart/form-data" asp-controller="Estadia" asp-action="Registrar_">
     <div class="form-group mb-3">
         <label class="mb-1">Nombre de la estadía</label>
         <input class="form-control" placeholder="Ingrese el nombre de la estancía" asp-for="Nombre">
@@ -29,23 +31,18 @@
         <span class="field-validation-error" asp-validation-for="PrecionNoche"></span>
     </div>
     <div class="form-group mb-3">
-        <label class="mb-1">Precio por noche</label>
-        <input class="form-control" type="number" min="0" max="any" step="0" placeholder="Ingrese el precio por noche" asp-for="Capacidad">
+        <label class="mb-1">Capacidad de personas</label>
+        <input class="form-control" type="number" min="0" max="any" step="1" placeholder="Ingrese la cantidad de persoanas permitidas" asp-for="Capacidad">
         <span class="field-validation-error" asp-validation-for="Capacidad"></span>
-    </div>
-    <div class="form-group mb-3">
-        <label class="mb-1">Precio por noche</label>
-        <input class="form-control" type="file" id="inputImageFile" asp-for="RutaImagen">
-        <span class="field-validation-error" asp-validation-for="RutaImagen"></span>
     </div>
     <div class="form-group mb-3">
         <label class="mb-1">Tipo de categoría</label>
         <select class="form-select form-control" asp-for="TipoCategoria">
             <option selected>Choose a option</option>
-            @*@foreach (string item in ViewBag.HealthCenters)
-                {
-                    <option class="select_opcion">@Html.DisplayFor(modelItem => item)</option>
-                }*@
+            @foreach (string item in ViewBag.CategoryTypes)
+            {
+                <option class="select_opcion">@Html.DisplayFor(type => item)</option>
+            }
         </select>
         <span class="field-validation-error" asp-validation-for="TipoCategoria"></span>
     </div>

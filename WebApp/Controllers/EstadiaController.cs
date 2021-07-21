@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using WebApp.Data;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using WebApp.Utility;
+using WebApp.Models;
 
 namespace WebApp.Controllers
 {
@@ -12,76 +10,59 @@ namespace WebApp.Controllers
         [Route("Estadia/Registrar")]
         public ActionResult EstadiaRegistrar()
         {
+            ConnectionDb connectionDb = new();
+            ViewBag.CategoryTypes = Utils.ExcGetList(connectionDb);
             return View();
         }
 
-        // GET: EstadiaControllercs/Details/5
-        public ActionResult Details(int id)
+        [Route("Estadia/Registrar_")]
+        public ActionResult EstadiaRegistrar(EstadiaViewModel estadiaViewModel)
         {
+            ConnectionDb connectionDb = new();
+            ViewBag.CategoryTypes = Utils.ExcGetList(connectionDb);
+            Utils.ExcRegisterEstadia(connectionDb, estadiaViewModel);
             return View();
         }
 
-        // GET: EstadiaControllercs/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: EstadiaControllercs/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: EstadiaControllercs/Edit/5
-        public ActionResult Edit(int id)
+        [Route("Estadia/Administrar")]
+        public ActionResult EstadiaAdministrar()
         {
             return View();
         }
 
-        // POST: EstadiaControllercs/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        [Route("Estadia/Administrar_")]
+        public JsonResult EstadiaAdministrar(string nombreEstancia)
         {
-            try
+            if (!string.IsNullOrEmpty(nombreEstancia))
             {
-                return RedirectToAction(nameof(Index));
+                ConnectionDb connectionDb = new();
+                return Json(Utils.ExcGetEstanciaByNombre(connectionDb, nombreEstancia));
             }
-            catch
-            {
-                return View();
-            }
+            return Json(false);
         }
 
-        // GET: EstadiaControllercs/Delete/5
-        public ActionResult Delete(int id)
+        [Route("Estadia/Eliminar")]
+        public JsonResult EstadiaEliminar(int estanciaId)
         {
-            return View();
+            ConnectionDb connectionDb = new();
+            Utils.ExcDeleteEstancia(connectionDb, estanciaId);
+            return Json("Eliminado correctamente");
         }
 
-        // POST: EstadiaControllercs/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [Route("Estadia/Categorias")]
+        public JsonResult GetCategorias()
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            ConnectionDb connectionDb = new();
+            return Json(Utils.ExcGetList(connectionDb));
+        }
+
+        [Route("Estadia/Actualizar")]
+        public JsonResult EstanciaActualizar(EstadiaViewModel estadiaViewModel)
+        {
+            ConnectionDb connectionDb = new();
+            Utils.ExcActualizarEstadia(connectionDb, estadiaViewModel);
+            return Json("Actualizado con exito");
         }
     }
 }

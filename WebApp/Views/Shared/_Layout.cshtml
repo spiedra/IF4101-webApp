@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - WebApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
 </head>
 <body class="bg-light">
     <header>
@@ -13,7 +14,7 @@
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img class="img-responsive" src="~/assets/mainIcon.svg" alt="Icono de la página" width="70" height="70" /></a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toggleMobileMenu" aria-controls="navbarSupportedContent"
+                <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#toggleMobileMenu" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -24,7 +25,7 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" asp-controller="Estadia" asp-action="Registrar">Registrar estadias</a>
-                            <a class="dropdown-item" asp-controller="Appointment" asp-action="Manage">Administrar estadias</a>
+                            <a class="dropdown-item" asp-controller="Estadia" asp-action="Administrar">Administrar estadias</a>
                         </div>
                     </div>
                     <div class="dropdown">
@@ -32,7 +33,7 @@
                             Categoria
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" asp-controller="Vaccine" asp-action="RegisterVaccination">Administrar categorias</a>
+                            <a class="dropdown-item" asp-controller="Categoria" asp-action="Categoria">Administrar categorias</a>
                         </div>
                     </div>
                     <div class="dropdown">
@@ -40,8 +41,8 @@
                             Reservas
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" asp-controller="Allergy" asp-action="RegisterAllergy">Registrar reserva</a>
-                            <a class="dropdown-item" asp-controller="Allergy" asp-action="ManageAllergy">Visualizar reservas</a>
+                            <a class="dropdown-item" asp-controller="Reserva" asp-action="Registrar">Registrar reserva</a>
+                            <a class="dropdown-item" asp-controller="Reserva" asp-action="Detalles">Reservas confirmadas</a>
                         </div>
                     </div>
                 </div>
@@ -56,12 +57,12 @@
 
     <footer class="border-top footer text-muted bg-dark">
         <div class="container">
-            &copy; 2021 - Examen #2 | Juan Carlos Sequeira Piedra
+            &copy; 2021 - Examen #2
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
