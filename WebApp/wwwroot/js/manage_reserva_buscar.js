@@ -33,7 +33,6 @@ function createListenerGetReservas() {
 function createListenerBtnConfirmSearch() {
     $("#btn_confirm").click(function () {
         var tbodyTable = $('#tbodyReservas');
-        alert("hola")
         $.ajax({
             url: '/Reserva/ReservasFiltrada',
             type: 'get',
