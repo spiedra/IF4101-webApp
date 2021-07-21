@@ -8,7 +8,7 @@
 
 <div class="mt-2">
     <h1 class="d-inline me-3">Reservas confirmadas</h1>
-    <button id="btn__search--appointment" class="btn mb-2 d-inline btn__search" data-bs-toggle="modal" data-bs-target="#searchModal"><img src="~/assets/search_black_24dp.svg" alt="Icon search" /></button>
+    <button id="btn__search--appointment" class="btn mb-2 d-inline btn__search" data-bs-toggle="modal" data-bs-target="#modalSearch"><img src="~/assets/search_black_24dp.svg" alt="Icon search" /></button>
 </div>
 <hr />
 <div class="row">
@@ -19,20 +19,56 @@
                     <thead class="table-dark">
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Estadía</th>
+                            <th scope="col">Nombre Estadía</th>
+                            <th scope="col">Provincia</th>
                             <th scope="col">Nombre cliente</th>
+                            <th scope="col">Cédula del cliente</th>
+                            <th scope="col">Télefono de contacto</th>
                             <th scope="col">Cantidad de personas</th>
                             <th scope="col">Fecha de entrada</th>
                             <th scope="col">Fecha de salida</th>
                         </tr>
                     </thead>
-                    <tbody id="tbodyCategoria"></tbody>
+                    <tbody id="tbodyReservas"></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalSearch" tabindex="-1" aria-labelledby="modalSearch" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Buscar Estadías</h5>
+            </div>
+            <div class="modal-body">
+                <form method="POST" class="needs-validation" novalidate>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Provincia</label>
+                        <input id="inProvinciaSa" class="form-control" placeholder="Ingrese alguna provincia" asp-for="Provincia">
+                        <span class="field-validation-error" asp-validation-for="Provincia"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Fecha De Entrada</label>
+                        <input id="inFechaEntrada" class="form-control" type="date">
+                        <span class="field-validation-error"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Fecha De Salida</label>
+                        <input id="inFechaSalida" class="form-control" type="date">
+                        <span class="field-validation-error"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCloseModalSearch" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="btn_confirm" type="button" class="btn btn-primary">Buscar</button>
             </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <script src="~/js/manage_reserva_buscar.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -8,9 +8,10 @@ namespace WebApp.Controllers
     public class EstadiaController : Controller
     {
         [Route("Estadia/Registrar")]
-        public ActionResult EstadiaRegistrar()
+        public ActionResult EstadiaRegistrar(string message)
         {
             ConnectionDb connectionDb = new();
+            ViewBag.message = message;
             ViewBag.CategoryTypes = Utils.ExcGetList(connectionDb);
             return View();
         }
@@ -19,9 +20,8 @@ namespace WebApp.Controllers
         public ActionResult EstadiaRegistrar(EstadiaViewModel estadiaViewModel)
         {
             ConnectionDb connectionDb = new();
-            ViewBag.CategoryTypes = Utils.ExcGetList(connectionDb);
             Utils.ExcRegisterEstadia(connectionDb, estadiaViewModel);
-            return View();
+            return RedirectToAction(nameof(EstadiaRegistrar), new { message = "Registrada correctamente" });
         }
 
         [Route("Estadia/Administrar")]

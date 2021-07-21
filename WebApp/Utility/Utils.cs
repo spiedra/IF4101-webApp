@@ -46,6 +46,14 @@ namespace WebApp.Utility
             return ReadGetEstancias(connectionDb);
         }
 
+        public static List<ReservaViewModel> ExcGetReservas(ConnectionDb connectionDb)
+        {
+            string commandText = "ADMINISTRACION.sp_GET_RESERVAS_CONFIRMADAS";
+            connectionDb.InitSqlComponents(commandText);
+            connectionDb.ExcecuteReader();
+            return ReadGetReservas(connectionDb);
+        }
+
         public static void ExcDeleteEstancia(ConnectionDb connectionDb, int AppointmentId)
         {
             string paramEstanciaId = "@param_ID_ESTANCIA"
@@ -101,6 +109,28 @@ namespace WebApp.Utility
                     Capacidad = connectionDb.SqlDataReader.GetInt32(5),
                     TipoCategoria = connectionDb.SqlDataReader.GetString(6),
                     Descripcion = connectionDb.SqlDataReader.GetString(7)
+                });
+            }
+            connectionDb.SqlConnection.Close();
+            return list;
+        }
+
+        private static List<ReservaViewModel> ReadGetReservas(ConnectionDb connectionDb)
+        {
+            List<ReservaViewModel> list = new();
+            while (connectionDb.SqlDataReader.Read())
+            {
+                list.Add(new()
+                {
+                    Id = connectionDb.SqlDataReader.GetInt32(0),
+                    NombreEstadia = connectionDb.SqlDataReader.GetString(1),
+                    CedulaCliente = connectionDb.SqlDataReader.GetString(2),
+                    NombreCliente = connectionDb.SqlDataReader.GetString(3),
+                    TelefonoContacto = connectionDb.SqlDataReader.GetString(4),
+                    CantidadPersonas = connectionDb.SqlDataReader.GetInt32(5),
+                    FechaEntrada = connectionDb.SqlDataReader.GetDateTime(6),
+                    FechaSalida = connectionDb.SqlDataReader.GetDateTime(7),
+                    Provincia = connectionDb.SqlDataReader.GetString(8)
                 });
             }
             connectionDb.SqlConnection.Close();
@@ -168,7 +198,7 @@ namespace WebApp.Utility
             return ReadParameterReturn(connectionDb);
         }
 
-        public static bool ExcRegisterReserva(ConnectionDb connectionDb, int id_estancia, string nombrecompleto ,string cedula, string telefono, int cantidadPersonas, string fechaEntrada, string fechaSalida)
+        public static bool ExcRegisterReserva(ConnectionDb connectionDb, int id_estancia ,string cedula, string nombrecompleto, string telefono, int cantidadPersonas, string fechaEntrada, string fechaSalida)
         {
             string paramIdEstancia = "@param_ID_ESTANCIA"
                , paramCedula = "@param_CEDULA_CLIENTE"

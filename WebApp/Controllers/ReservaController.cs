@@ -18,11 +18,39 @@ namespace WebApp.Controllers
             return View();
         }
 
+        [Route("Reserva/Detalles")]
+        public ActionResult ReservaBuscar()
+        {
+            return View();
+        }
+
         [Route("Reserva/Estadias")]
         public JsonResult GetEstancias()
         {
             ConnectionDb connectionDb = new();
             return Json(Utils.ExcGetEstadias(connectionDb));
+        }
+
+        [Route("Reserva/Reservas")]
+        public JsonResult GetReservas()
+        {
+            ConnectionDb connectionDb = new();
+            return Json(Utils.ExcGetReservas(connectionDb));
+        }
+
+        [Route("Reserva/ReservasFiltrada")]
+        public JsonResult GetReservas(string provincia, DateTime entrada, DateTime salida)
+        {
+            ConnectionDb connectionDb = new();
+            if (!string.IsNullOrEmpty(provincia))
+            {
+                return Json(Utils.ExcGetReservas(connectionDb).Where(n =>
+                n.Provincia.ToLower().Contains(provincia.ToLower()) ||
+                n.FechaEntrada <= entrada &&
+                n.FechaSalida >= salida
+                ));
+            }
+            return Json(null);
         }
 
         [Route("Reserva/EstadiasFiltrada")]
@@ -51,76 +79,7 @@ namespace WebApp.Controllers
             {
                 return Json("Reserva confimada correctamente");
             }
-            return Json("No se ha podido completar la reserva. Intenlato de nuevo");
-        }
-
-        // GET: ReservaController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: ReservaController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ReservaController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ReservaController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ReservaController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ReservaController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ReservaController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return Json("No se ha podido completar la reserva. Revisa la cantidad de personas permitidas");
         }
     }
 }

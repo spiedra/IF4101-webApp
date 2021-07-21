@@ -5,11 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>@ViewBag.image</h1>
-
-<h1>Registro de estancias</h1>
+<h1>Registro de estadías</h1>
+<span class=""><b>@ViewBag.message</b></span>
 <hr />
-<form class="container mt-5 mb-3 py-3 form__register needs-validation" method="POST" enctype="multipart/form-data" asp-controller="Estadia" asp-action="Registrar_">
+<form class="container mt-5 mb-3 py-3 form__register needs-validation" method="POST" asp-controller="Estadia" asp-action="Registrar_">
     <div class="form-group mb-3">
         <label class="mb-1">Nombre de la estadía</label>
         <input class="form-control" placeholder="Ingrese el nombre de la estancía" asp-for="Nombre">

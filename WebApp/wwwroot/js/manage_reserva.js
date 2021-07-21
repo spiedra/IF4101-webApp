@@ -5,8 +5,14 @@ $(document).ready(function () {
     createListenerBtnConfirmSearch();
     createListenerBtnConfirmReserva();
     createListenerBtnSearch();
-
 });
+
+function createListenerBtnReservar() {
+    $(".btn-reservar").click(function () {
+        idEstanciaa = $(this).closest('tr').attr('id');
+    });
+}
+
 
 function setReservaInfo() {
     var tbodyTable = $('#tbodyReserva');
@@ -27,28 +33,28 @@ function setReservaInfo() {
                     .append($('<td id="tipoCategoria' + element['tipoCategoria'] + '" class="tipoCategoria">').append(element["tipoCategoria"]))
                     .append($('<td id="descripcion' + element['descripcion'] + '" class="descripcion">').append(element["descripcion"]))
                     .append($('<td>').append(
-                        $('<button id="btnReservar" class="btn btn-success mb-2 me-1 btn-reservar" data-bs-toggle="modal" data-bs-target="#modalReservar">Reservar</button>'))))
+                        $('<button class="btn btn-success mb-2 me-1 btn-reservar" data-bs-toggle="modal" data-bs-target="#modalReservar">Reservar</button>'))))
             });
+            createListenerBtnConfirmSearch();
+            createListenerBtnReservar();
         }
     });
 }
 
 function createListenerBtnSearch() {
     $("#btn_search").click(function () {
-        idEstanciaa = $(this).closest('tr').attr('id');
-        alert(idEstanciaa)
-        //setCategorias();
+        setCategorias();
     });
 }
 
 function createListenerBtnConfirmReserva() {
     $("#btn_confirmReserva").click(function () {
-        alert("aja  "+ 1)
+        alert("aja  " + idEstanciaa)
         $.ajax({
             url: '/Reserva/Registrar_',
             type: 'post',
             data: {
-                "idEstancia": 1,
+                "idEstancia": idEstanciaa,
                 "cedula": $('#inCedula').val(),
                 "nombreCompleto": $('#inNombreCompleto').val(),
                 "telefono": $('#inTelefonoContacto').val(),
@@ -95,6 +101,8 @@ function createListenerBtnConfirmSearch() {
                             .append($('<td>').append(
                                 $('<button class="btn btn-success mb-2 me-1 btn-reservar" data-bs-toggle="modal" data-bs-target="#modalReservar">Reservar</button>'))))
                     });
+                    createListenerBtnConfirmSearch();
+                    createListenerBtnReservar();
                 } else {
                     alert("Por favor llenar los espacios en blanco");
                 }
