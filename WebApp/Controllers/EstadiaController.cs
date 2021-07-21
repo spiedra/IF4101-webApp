@@ -24,7 +24,6 @@ namespace WebApp.Controllers
             return View();
         }
 
-
         [Route("Estadia/Administrar")]
         public ActionResult EstadiaAdministrar()
         {

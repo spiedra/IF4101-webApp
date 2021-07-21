@@ -9,6 +9,7 @@ namespace WebApp.Models
 {
     public class CategoriaViewModel
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "Por favor el nombre del tipo de categoría")]
         public string Tipo { get; set; }
     }

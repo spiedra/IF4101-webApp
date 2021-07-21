@@ -6,30 +6,126 @@
 }
 
 <div class="mt-2">
-    <h1 class="d-inline me-3">Registrar reservas</h1>
-    <button id="btn__search--appointment" class="btn mb-2 d-inline btn__search" data-bs-toggle="modal" data-bs-target="#searchModal"><img src="~/assets/search_black_24dp.svg" alt="Icon search" /></button>
+    <h1 class="d-inline me-3">Reservas confirmadas</h1>
+    <button id="btn_search" class="btn mb-2 d-inline btn__search" data-bs-toggle="modal" data-bs-target="#modalSearch"><img src="~/assets/search_black_24dp.svg" alt="Icon search" /></button>
 </div>
 <hr />
 <div class="row">
     <div class="container mt-3 table-responsive">
         <div class="row w-100">
             <div class="col-12">
-                <table class="table table-bordered">
+                <table id="myTable" class="table table-bordered">
                     <thead class="table-dark">
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Imagen</th>
+                            <th scope="col">Provincia</th>
+                            <th scope="col">Dirección</th>
+                            <th scope="col">Precio noche</th>
+                            <th scope="col">Capacidad</th>
+                            <th scope="col">Categoria</th>
+                            <th scope="col">Descripción</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="tbodyCategoria"></tbody>
+                    <tbody id="tbodyReserva"></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalReservar" tabindex="-1" aria-labelledby="modalReservar" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmación de reserva</h5>
+            </div>
+            <div class="modal-body">
+                <form method="POST" class="needs-validation" novalidate>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Cédula</label>
+                        <input id="inCedula" class="form-control" placeholder="Ingrese su número de cédula" asp-for="Nombre">
+                        <span class="field-validation-error" asp-validation-for="Nombre"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Nombre Completo</label>
+                        <input id="inNombreCompleto" class="form-control" placeholder="Ingrese su nombre completo" name="nombreCompleto">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Telefono De Contacto</label>
+                        <input id="inTelefonoContacto" class="form-control" placeholder="8888-8888" name="numeroTelefono">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Cantidad De Personas</label>
+                        <input id="inCantidadPersonas" class="form-control" type="number" min="0" max="any" step="1" placeholder="Ingrese la cantidad de personas para la reserva" asp-for="Capacidad">
+                        <span class="field-validation-error" asp-validation-for="Capacidad"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Fecha De Entrada</label>
+                        <input id="inFechaEntrada" class="form-control" type="date">
+                        <span class="field-validation-error"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Fecha De Salida</label>
+                        <input id="inFechaSalida" class="form-control" type="date">
+                        <span class="field-validation-error"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCloseModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="btn_confirmReserva" type="button" class="btn btn-primary">Confirmar reserva</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSearch" tabindex="-1" aria-labelledby="modalSearch" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Buscar Estadías</h5>
+            </div>
+            <div class="modal-body">
+                <form method="POST" class="needs-validation" novalidate>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Nombre Estadía</label>
+                        <input id="inNombreEstadiaSa" class="form-control" placeholder="Ingrese algún nombre de una estadía" asp-for="Nombre">
+                        <span class="field-validation-error" asp-validation-for="Nombre"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Provincia</label>
+                        <input id="inProvinciaSa" class="form-control" placeholder="Ingrese alguna provincia" asp-for="Provincia">
+                        <span class="field-validation-error" asp-validation-for="Provincia"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Precio Rango</label>
+                        <input id="inPrecioNocheSa" class="form-control" type="number" min="0" max="any" step="1" placeholder="Ingrese un rango de precio" asp-for="PrecionNoche">
+                        <span class="field-validation-error" asp-validation-for="PrecionNoche"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Tipo de categoría</label>
+                        <select id="selectCategoriaSa" class="form-select form-control" asp-for="TipoCategoria">
+                          
+                        </select>
+                        <span class="field-validation-error" asp-validation-for="TipoCategoria"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="mb-1">Capacidad</label>
+                        <input id="inCapacidadSa" class="form-control" type="number" min="0" max="any" step="1" placeholder="Ingrese la capacidad" asp-for="Capacidad">
+                        <span class="field-validation-error" asp-validation-for="Capacidad"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCloseModalSearch" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="btn_confirm" type="button" class="btn btn-primary">Buscar</button>
             </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <script src="~/js/manage_reserva.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

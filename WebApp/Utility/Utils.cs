@@ -20,14 +20,30 @@ namespace WebApp.Utility
             return ReadGetList(connectionDb);
         }
 
+        public static List<CategoriaViewModel> ExcGetListCategorias(ConnectionDb connectionDb)
+        {
+            string commandText = "ADMINISTRACION.sp_GET_CATEGORIES";
+            connectionDb.InitSqlComponents(commandText);
+            connectionDb.ExcecuteReader();
+            return ReadGetListCategorias(connectionDb);
+        }
+
         public static EstadiaViewModel ExcGetEstanciaByNombre(ConnectionDb connectionDb, string nombreEstancia)
         {
             string paramNombre = "@param_NOMBRE"
-          , commandText = "ADMINISTRACION.sp_GET_ESTADIA_BY_NOMBRE ";
+          , commandText = "ADMINISTRACION.sp_GET_ESTADIA_BY_NOMBRE";
             connectionDb.InitSqlComponents(commandText);
             connectionDb.CreateParameter(paramNombre, SqlDbType.VarChar, nombreEstancia);
             connectionDb.ExcecuteReader();
             return ReadGetEstadiaByCard(connectionDb);
+        }
+
+        public static List<EstadiaViewModel> ExcGetEstadias(ConnectionDb connectionDb)
+        {
+            string commandText = "ADMINISTRACION.sp_GET_ESTANCIAS";
+            connectionDb.InitSqlComponents(commandText);
+            connectionDb.ExcecuteReader();
+            return ReadGetEstancias(connectionDb);
         }
 
         public static void ExcDeleteEstancia(ConnectionDb connectionDb, int AppointmentId)
@@ -39,25 +55,56 @@ namespace WebApp.Utility
             connectionDb.ExecuteNonQuery();
         }
 
+        public static void ExcDeleteCategoria(ConnectionDb connectionDb, CategoriaViewModel categoriaViewModel)
+        {
+            string paramEstanciaId = "@param_ID_CATEGORIA"
+          , commandText = "ADMINISTRACION.sp_ELIMINAR_CATEGORIA";
+            connectionDb.InitSqlComponents(commandText);
+            connectionDb.CreateParameter(paramEstanciaId, SqlDbType.Int, categoriaViewModel.Id);
+            connectionDb.ExecuteNonQuery();
+        }
+
         private static EstadiaViewModel ReadGetEstadiaByCard(ConnectionDb connectionDb)
         {
-            if (connectionDb.SqlDataReader.Read()) { 
-            EstadiaViewModel estadiaViewModel = new()
+            if (connectionDb.SqlDataReader.Read())
             {
-                ID = connectionDb.SqlDataReader.GetInt32(0),
-                Nombre = connectionDb.SqlDataReader.GetString(1),
-                Provincia = connectionDb.SqlDataReader.GetString(2),
-                Direccion = connectionDb.SqlDataReader.GetString(3),
-                PrecionNoche = connectionDb.SqlDataReader.GetDecimal(4),
-                Capacidad = connectionDb.SqlDataReader.GetInt32(5),
-                TipoCategoria = connectionDb.SqlDataReader.GetString(6),
-                Descripcion = connectionDb.SqlDataReader.GetString(7)
-            };
+                EstadiaViewModel estadiaViewModel = new()
+                {
+                    ID = connectionDb.SqlDataReader.GetInt32(0),
+                    Nombre = connectionDb.SqlDataReader.GetString(1),
+                    Provincia = connectionDb.SqlDataReader.GetString(2),
+                    Direccion = connectionDb.SqlDataReader.GetString(3),
+                    PrecionNoche = connectionDb.SqlDataReader.GetDecimal(4),
+                    Capacidad = connectionDb.SqlDataReader.GetInt32(5),
+                    TipoCategoria = connectionDb.SqlDataReader.GetString(6),
+                    Descripcion = connectionDb.SqlDataReader.GetString(7)
+                };
                 return estadiaViewModel;
             }
             connectionDb.SqlConnection.Close();
 
             return null;
+        }
+
+        private static List<EstadiaViewModel> ReadGetEstancias(ConnectionDb connectionDb)
+        {
+            List<EstadiaViewModel> list = new();
+            while (connectionDb.SqlDataReader.Read())
+            {
+                list.Add(new()
+                {
+                    ID = connectionDb.SqlDataReader.GetInt32(0),
+                    Nombre = connectionDb.SqlDataReader.GetString(1),
+                    Provincia = connectionDb.SqlDataReader.GetString(2),
+                    Direccion = connectionDb.SqlDataReader.GetString(3),
+                    PrecionNoche = connectionDb.SqlDataReader.GetDecimal(4),
+                    Capacidad = connectionDb.SqlDataReader.GetInt32(5),
+                    TipoCategoria = connectionDb.SqlDataReader.GetString(6),
+                    Descripcion = connectionDb.SqlDataReader.GetString(7)
+                });
+            }
+            connectionDb.SqlConnection.Close();
+            return list;
         }
 
         private static List<string> ReadGetList(ConnectionDb connectionDb)
@@ -66,6 +113,22 @@ namespace WebApp.Utility
             while (connectionDb.SqlDataReader.Read())
             {
                 list.Add(connectionDb.SqlDataReader.GetString(0));
+            }
+            connectionDb.SqlConnection.Close();
+            return list;
+        }
+
+        private static List<CategoriaViewModel> ReadGetListCategorias(ConnectionDb connectionDb)
+        {
+            List<CategoriaViewModel> list = new();
+            while (connectionDb.SqlDataReader.Read())
+            {
+                list.Add(new CategoriaViewModel()
+                {
+                    Id = connectionDb.SqlDataReader.GetInt32(0),
+                    Tipo = connectionDb.SqlDataReader.GetString(1)
+                });
+
             }
             connectionDb.SqlConnection.Close();
             return list;
@@ -92,6 +155,40 @@ namespace WebApp.Utility
             connectionDb.CreateParameter(paramTipoCategoria, SqlDbType.VarChar, appointmentViewModel.TipoCategoria);
             connectionDb.CreateParameter(paramDescripcion, SqlDbType.VarChar, appointmentViewModel.Descripcion);
             connectionDb.ExecuteNonQuery();
+        }
+
+        public static bool ExcRegisterCategoria(ConnectionDb connectionDb, CategoriaViewModel categoriaViewModel)
+        {
+            string paramCategoriaTipo = "@param_TIPO"
+           , commandText = "ADMINISTRACION.sp_REGISTER_CATEGORIA";
+            connectionDb.InitSqlComponents(commandText);
+            connectionDb.CreateParameter(paramCategoriaTipo, SqlDbType.VarChar, categoriaViewModel.Tipo);
+            connectionDb.CreateParameterOutput();
+            connectionDb.ExcecuteReader();
+            return ReadParameterReturn(connectionDb);
+        }
+
+        public static bool ExcRegisterReserva(ConnectionDb connectionDb, int id_estancia, string nombrecompleto ,string cedula, string telefono, int cantidadPersonas, string fechaEntrada, string fechaSalida)
+        {
+            string paramIdEstancia = "@param_ID_ESTANCIA"
+               , paramCedula = "@param_CEDULA_CLIENTE"
+               , paramNombreCompleto = "@param_NOMBRE_COMPLETO"
+               , paramCantidadPersonas = "@param_CANTIAD_PERSONAS"
+               , paramTelefono = "@param_TELEFONO"
+               , paramFechaEntrada = "@param_FECHA_ENTRADA"
+               , paramFechaSalida = "@param_FECHA_SALIDA"
+           , commandText = "[ADMINISTRACION].[sp_CONFIRMAR_RESERVA]";
+            connectionDb.InitSqlComponents(commandText);
+            connectionDb.CreateParameter(paramIdEstancia, SqlDbType.Int, id_estancia);
+            connectionDb.CreateParameter(paramCedula, SqlDbType.VarChar, cedula);
+            connectionDb.CreateParameter(paramNombreCompleto, SqlDbType.VarChar, nombrecompleto);
+            connectionDb.CreateParameter(paramCantidadPersonas, SqlDbType.Int, cantidadPersonas);
+            connectionDb.CreateParameter(paramTelefono, SqlDbType.VarChar, telefono);
+            connectionDb.CreateParameter(paramFechaEntrada, SqlDbType.Date, fechaEntrada);
+            connectionDb.CreateParameter(paramFechaSalida, SqlDbType.Date, fechaSalida);
+            connectionDb.CreateParameterOutput();
+            connectionDb.ExcecuteReader();
+            return ReadParameterReturn(connectionDb);
         }
 
         public static void ExcActualizarEstadia(ConnectionDb connectionDb, EstadiaViewModel estadiaVieModel)
@@ -125,5 +222,15 @@ namespace WebApp.Utility
                 file.CopyTo(fs);
             }
         }
+
+        private static bool ReadParameterReturn(ConnectionDb connectionDb)
+        {
+            if ((int)connectionDb.ParameterReturn.Value == 1)
+                return true;
+
+            connectionDb.SqlConnection.Close();
+            return false;
+        }
+
     }
 }
